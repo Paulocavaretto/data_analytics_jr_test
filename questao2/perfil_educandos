@@ -1,0 +1,39 @@
+import sqlite3
+
+# Função para criar a tabela 'escolas_alunos' no banco de dados
+def criar_tabela_escolas_alunos():
+    # Conectando-se ao banco de dados
+    conn = sqlite3.connect('caminho_para_seu_banco_de_dados.db')
+    cur = conn.cursor()
+    
+    # Criando a tabela 'escolas_alunos' com as chaves estrangeiras referenciando 'perfil_educandos' e 'escolas'
+    cur.execute('''CREATE TABLE IF NOT EXISTS escolas_alunos (
+                    id INTEGER PRIMARY KEY,
+                    aluno_id INTEGER,
+                    escola_id INTEGER,
+                    FOREIGN KEY (aluno_id) REFERENCES perfil_educandos(id),
+                    FOREIGN KEY (escola_id) REFERENCES escolas(id)
+                    )''')
+    
+    # Commit das alterações e fechamento da conexão
+    conn.commit()
+    conn.close()
+
+# Função para relacionar um aluno a uma escola na tabela 'escolas_alunos'
+def relacionar_escola_aluno(escola_id, aluno_id):
+    # Conectando-se ao banco de dados
+    conn = sqlite3.connect('caminho_para_seu_banco_de_dados.db')
+    cur = conn.cursor()
+    
+    # Inserindo os dados na tabela 'escolas_alunos'
+    cur.execute("INSERT INTO escolas_alunos (escola_id, aluno_id) VALUES (?, ?)", (escola_id, aluno_id))
+    
+    # Commit das alterações e fechamento da conexão
+    conn.commit()
+    conn.close()
+
+# Chamando a função para criar a tabela 'escolas_alunos'
+criar_tabela_escolas_alunos()
+
+# Chamando a função para relacionar uma escola (ID: 1) a um aluno (ID: 1)
+relacionar_escola_aluno(1, 1)
